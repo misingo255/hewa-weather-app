@@ -1,0 +1,47 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Users\MISINGO\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js install
+
+PATH: 
+  C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\xampp\php;C:\composer;C:\Program Files\Java\jdk-16\bin;C:\flutter\bin;C:\Program Files\Git\cmd;C:\dartsdk\bin;C:\Program Files\MongoDB\Server\5.0\data;C:\Users\MISINGO\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files\nodejs\;C:\Program Files\Tesseract-OCR;C:\Program Files\PuTTY\;C:\Users\MISINGO\AppData\Local\Programs\Python\Python39\Scripts\;C:\Users\MISINGO\AppData\Local\Programs\Python\Python39\;C:\Users\MISINGO\AppData\Local\Microsoft\WindowsApps;C:\Users\MISINGO\AppData\Roaming\Composer\vendor\bin;C:\Users\MISINGO\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\MISINGO\AppData\Local\Android\Sdk\platform-tools;C:\Users\MISINGO\AppData\Roaming\npm;C:\Users\MISINGO\AppData\Local\Programs\MiKTeX\miktex\bin\x64\
+
+Yarn version: 
+  1.22.17
+
+Node version: 
+  16.15.0
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: getaddrinfo ENOTFOUND registry.yarnpkg.com
+      at GetAddrInfoReqWrap.onlookup [as oncomplete] (node:dns:71:26)
+
+npm manifest: 
+  {
+    "name": "weather-app",
+    "version": "1.0.0",
+    "main": "node_modules/expo/AppEntry.js",
+    "scripts": {
+      "start": "expo start",
+      "android": "expo start --android",
+      "ios": "expo start --ios",
+      "web": "expo start --web"
+    },
+    "dependencies": {
+      "expo": "~47.0.12",
+      "expo-status-bar": "~1.4.2",
+      "react": "18.1.0",
+      "react-native": "0.70.5"
+    },
+    "devDependencies": {
+      "@babel/core": "^7.12.9"
+    },
+    "private": true
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
