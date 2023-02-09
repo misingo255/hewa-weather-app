@@ -5,6 +5,8 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { theme } from './modules/core/theme'
 import {
   HomeScreen,
+  SearchScreen,
+  ResultsScreen,
 
 } from './modules/screens'
 
@@ -15,13 +17,15 @@ export default function App() {
     <Provider theme={theme}>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="HomeScreen"
+          initialRouteName="SearchScreen"
           screenOptions={{
             headerShown: false,
           }}
         >
 
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
+          <Stack.Screen name="SearchScreen" component={SearchScreen} />
+          <Stack.Screen name="ResultsScreen" component={ResultsScreen} />
 
           
         </Stack.Navigator>

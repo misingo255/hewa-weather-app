@@ -8,7 +8,7 @@ const BackgroundImage = () => {
 };
 
 
-export default function HomeScreen ({ navigation }){
+export default function SearchScreen ({ navigation }){
   return (
     <View style={styles.container}>
         <BackgroundImage />
