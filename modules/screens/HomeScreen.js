@@ -1,5 +1,11 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { EvilIcons } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
+import { Fontisto } from '@expo/vector-icons';
+
 
 const BackgroundImage = () => {
   return (
@@ -9,6 +15,33 @@ const BackgroundImage = () => {
 
 
 export default function HomeScreen ({ navigation }){
+
+  
+  let [data, setData] = useState(null);
+
+
+  useEffect(() => {
+
+      const city = "dar es salaam";
+      const part1 = "https://api.openweathermap.org/data/2.5/weather?q=";
+      const part2 = "&appid=c1f0fdee222f1940a77d2026fef8d81d"
+      const URL = part1 + city + part2;
+      fetch(URL)
+      .then(response => {
+        if (!response.ok) {
+            console.log("Network response was not ok.");
+        }
+        return response.json();
+    })
+    .then(datas => {
+      setData(datas.message);
+      console.log(data)
+    })
+    .catch(error => console.error("There was a problem with the fetch operation:", error));
+
+      
+  }, []);
+
   return (
     <View style={styles.container}>
         <BackgroundImage />
@@ -18,25 +51,27 @@ export default function HomeScreen ({ navigation }){
         </View>
 
         <View style= {styles.locationContainer}>
-            <Image source = {require("../assets/location.png")} style = {styles.locationIcon} />
-            <Text style = {styles.locationName}>Dar es salaam</Text>
+            <Ionicons name="location-sharp" size={24} color="#FFB200" />
+            <Text style = {styles.locationName}>{data["name"]}</Text>
         </View>
 
         <View style = {styles.cloudsContainer}>
-            <Image source = {require("../assets/location.png")} style = {styles.cloudsIcon} />
+            {
+                    
+            }
         </View>
 
         <View style = {styles.temperatureContainer}>
-            <Text style = {styles.tempValue}>27</Text>
+            <Text style = {styles.tempValue}>{data["main"]["temp"]}</Text>
             <Text style = {styles.tempSymbol}>c</Text>
         </View>
 
         <View style = {styles.conditionContainer}>
             <View style = {styles.subConditionContainer}>
               <Text style = {styles.feelingText}>Feeling Like</Text>
-              <Text style = {styles.feelingNumber}>28 C</Text>
+              <Text style = {styles.feelingNumber}>{data["main"]["feels_like"]}</Text>
             </View> 
-            <Text style = {styles.conditionName}>Cloudy</Text>
+            <Text style = {styles.conditionName}>{data["weather"][0]["main"]}</Text>
         </View>
 
         <View style = {styles.blankContainer}>
@@ -46,38 +81,38 @@ export default function HomeScreen ({ navigation }){
         <View style = {styles.statisContainer}>
 
               <View style = {styles.windContainer}>
-                  <Image source = {require("../assets/location.png")} style = {styles.windIcon} />
+                  <Feather name="wind" size={24} color="white" />
                   <Text style = {styles.windName}>Windspeed</Text>
-                  <Text style = {styles.windValue}>20 Km/Hr</Text>
+                  <Text style = {styles.windValue}>{data["wind"]["speed"]} Km/Hr</Text>
 
               </View>
 
               <View style = {styles.dateContainer}>
-                  <Image source = {require("../assets/location.png")} style = {styles.dateIcon} />
+                  <EvilIcons name="calendar" size={24} color="white" />
                   <Text style = {styles.dateName}>Tuesday, 04 Oct 2022</Text>
                   <Text style = {styles.dateValue}>12:00</Text>
               </View>
 
               <View style = {styles.humidityContainer}>
-                  <Image source = {require("../assets/location.png")} style = {styles.humidityIcon} />
+                  <Fontisto name="rain" size={24} color="white" />
                   <Text style = {styles.humidityName}>Humidity</Text>
-                  <Text style = {styles.humidityValue}>20%</Text>
+                  <Text style = {styles.humidityValue}>{data["main"]["humidity"]}%</Text>
               </View>
 
         </View>
 
         <View style = {styles.navContainer}>
 
-          <TouchableOpacity style = {styles.homeContainer}>
-              <Image source = {require("../assets/location.png")} style = {styles.homeIcon} />
+          <TouchableOpacity style = {styles.homeContainer} onPress = {() => navigation.navigate("HomeScreen")}>
+            <Entypo name="home" size={40} color="#FFB200" />
           </TouchableOpacity>
 
-          <TouchableOpacity style = {styles.searchContainer}>
-              <Image source = {require("../assets/location.png")} style = {styles.searchIcon} />
+          <TouchableOpacity style = {styles.searchContainer} onPress = {() => navigation.navigate("SearchScreen")}>
+              <EvilIcons name="search" size={40} color="white" />
           </TouchableOpacity>
 
-          <TouchableOpacity style = {styles.backContainer}>
-              <Image source = {require("../assets/location.png")} style = {styles.backIcon} />
+          <TouchableOpacity style = {styles.backContainer} onPress = {() => navigation.navigate("HomeScreen")}>
+                <Ionicons name="arrow-undo-outline" size={40} color="white" />
           </TouchableOpacity>
 
         </View>

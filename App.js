@@ -7,6 +7,7 @@ import {
   HomeScreen,
   SearchScreen,
   ResultsScreen,
+  LoaderScreen,
 
 } from './modules/screens'
 
@@ -17,7 +18,7 @@ export default function App() {
     <Provider theme={theme}>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="SearchScreen"
+          initialRouteName="homeScreen"
           screenOptions={{
             headerShown: false,
           }}
@@ -26,6 +27,7 @@ export default function App() {
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
           <Stack.Screen name="SearchScreen" component={SearchScreen} />
           <Stack.Screen name="ResultsScreen" component={ResultsScreen} />
+          <Stack.Screen name="LoaderScreen" component={LoaderScreen} />
 
           
         </Stack.Navigator>
