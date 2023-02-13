@@ -1,5 +1,13 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { EvilIcons } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
+import { Fontisto } from '@expo/vector-icons';
+import { useRoute } from "@react-navigation/native"
+
+
 
 const BackgroundImage = () => {
   return (
@@ -9,6 +17,22 @@ const BackgroundImage = () => {
 
 
 export default function ResultsScreen ({ navigation }){
+
+  const route = useRoute();
+  const data = route.params?.results;
+
+  const temperature = data.temp;
+  const humidity = data.humidity;
+  const wind = data.wind;
+  const condition = data.description;
+  const feeling = data.feels_like;
+  const icon = data.icon;
+  const city = data.name;
+
+  const dating = new Date();
+  const date = dating.toDateString();
+  const time = dating.toLocaleTimeString()
+
   return (
     <View style={styles.container}>
         <BackgroundImage />
@@ -18,25 +42,25 @@ export default function ResultsScreen ({ navigation }){
         </View>
 
         <View style= {styles.locationContainer}>
-            <Image source = {require("../assets/location.png")} style = {styles.locationIcon} />
-            <Text style = {styles.locationName}>Dar es salaam</Text>
+            <Ionicons name="location-sharp" size={24} color="#FFB200" />
+            <Text style = {styles.locationName}>{city}</Text>
         </View>
 
         <View style = {styles.cloudsContainer}>
-            <Image source = {require("../assets/location.png")} style = {styles.cloudsIcon} />
+            <Image source = {{uri:icon}} style = {styles.theIcon}/>
         </View>
 
         <View style = {styles.temperatureContainer}>
-            <Text style = {styles.tempValue}>27</Text>
+            <Text style = {styles.tempValue}>{temperature}</Text>
             <Text style = {styles.tempSymbol}>c</Text>
         </View>
 
         <View style = {styles.conditionContainer}>
             <View style = {styles.subConditionContainer}>
               <Text style = {styles.feelingText}>Feeling Like</Text>
-              <Text style = {styles.feelingNumber}>28 C</Text>
+              <Text style = {styles.feelingNumber}>{feeling}</Text>
             </View> 
-            <Text style = {styles.conditionName}>Cloudy</Text>
+            <Text style = {styles.conditionName}>{condition}</Text>
         </View>
 
         <View style = {styles.blankContainer}>
@@ -46,38 +70,38 @@ export default function ResultsScreen ({ navigation }){
         <View style = {styles.statisContainer}>
 
               <View style = {styles.windContainer}>
-                  <Image source = {require("../assets/location.png")} style = {styles.windIcon} />
+                  <Feather name="wind" size={24} color="white" />
                   <Text style = {styles.windName}>Windspeed</Text>
-                  <Text style = {styles.windValue}>20 Km/Hr</Text>
+                  <Text style = {styles.windValue}>{wind} Km/Hr</Text>
 
               </View>
 
               <View style = {styles.dateContainer}>
-                  <Image source = {require("../assets/location.png")} style = {styles.dateIcon} />
-                  <Text style = {styles.dateName}>Tuesday, 04 Oct 2022</Text>
-                  <Text style = {styles.dateValue}>12:00</Text>
+                  <EvilIcons name="calendar" size={24} color="white" />
+                  <Text style = {styles.dateName}>{date}</Text>
+                  <Text style = {styles.dateValue}>{time}</Text>
               </View>
 
               <View style = {styles.humidityContainer}>
-                  <Image source = {require("../assets/location.png")} style = {styles.humidityIcon} />
+                  <Fontisto name="rain" size={24} color="white" />
                   <Text style = {styles.humidityName}>Humidity</Text>
-                  <Text style = {styles.humidityValue}>20%</Text>
+                  <Text style = {styles.humidityValue}>{humidity}%</Text>
               </View>
 
         </View>
 
         <View style = {styles.navContainer}>
 
-          <TouchableOpacity style = {styles.homeContainer}>
-              <Image source = {require("../assets/location.png")} style = {styles.homeIcon} />
+          <TouchableOpacity style = {styles.homeContainer} onPress = {() => navigation.navigate("HomeScreen")}>
+            <Entypo name="home" size={40} color="white" />
           </TouchableOpacity>
 
-          <TouchableOpacity style = {styles.searchContainer}>
-              <Image source = {require("../assets/location.png")} style = {styles.searchIcon} />
+          <TouchableOpacity style = {styles.searchContainer} onPress = {() => navigation.navigate("SearchScreen")}>
+              <EvilIcons name="search" size={40} color="#FFB200" />
           </TouchableOpacity>
 
-          <TouchableOpacity style = {styles.backContainer}>
-              <Image source = {require("../assets/location.png")} style = {styles.backIcon} />
+          <TouchableOpacity style = {styles.backContainer} onPress = {() => navigation.navigate("SearchScreen")}>
+                <Ionicons name="arrow-undo-outline" size={40} color="white" />
           </TouchableOpacity>
 
         </View>
@@ -113,6 +137,14 @@ const styles = StyleSheet.create({
 
   },
 
+  theIcon:{
+    width: '150px',
+    height: '150px',
+    position: "absolute",
+    left: "50%",
+
+  },
+
   locationContainer:{
     width: '100%',
     height: '10%',
@@ -140,16 +172,8 @@ const styles = StyleSheet.create({
     height: '15%',
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 
-  cloudsIcon: {
-    width: "50px",
-    height: "50px",
-    position: "absolute",
-    left: 250,
-  },
   temperatureContainer: {
     width: '100%',
     height: '15%',
@@ -160,7 +184,7 @@ const styles = StyleSheet.create({
   },
 
   tempValue: {
-      fontSize: "100px",
+      fontSize: "50px",
       fontWeight: "bold",
       color: "white",
   },
@@ -169,8 +193,8 @@ const styles = StyleSheet.create({
       fontSize: "50px",
       color: "white",
       position: "absolute",
-      top: 40,
-      left: 270,
+      top: "15%",
+      left: "75%",
   },
   conditionContainer:{
     width: '100%',
@@ -244,7 +268,8 @@ const styles = StyleSheet.create({
   windValue: {
     fontSize: 20,
     color: 'white',
-    marginLeft: 90,
+    position: "absolute",
+    left: "65%",
   },
 
   dateContainer:{
@@ -272,7 +297,8 @@ const styles = StyleSheet.create({
   dateValue: {
     fontSize: 20,
     color: 'white',
-    marginLeft: 30,
+    position: "absolute",
+    left: "65%",
   },
 
   humidityContainer:{
@@ -300,7 +326,8 @@ const styles = StyleSheet.create({
   humidityValue: {
     fontSize: 20,
     color: 'white',
-    marginLeft: 150,
+    position: "absolute",
+    left: "65%",
   },
 
   navContainer:{

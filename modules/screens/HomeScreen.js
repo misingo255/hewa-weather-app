@@ -5,6 +5,7 @@ import { Entypo } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { Fontisto } from '@expo/vector-icons';
+import { getWeather, dailyForecast, showWeather, getLocation } from 'react-native-weather-api';
 
 
 const BackgroundImage = () => {
@@ -17,30 +18,65 @@ const BackgroundImage = () => {
 export default function HomeScreen ({ navigation }){
 
   
-  let [data, setData] = useState(null);
+  const [temperature, setTemperature] = useState("");
+  const [humidity, setHumidity] = useState("");
+  const [wind, setWind] = useState("");
+  const [condition, setCondition] = useState("");
+  const [feeling, setFeeling] = useState("");
+  const [icon, setIcon] = useState("");
+  const [city, setCity] = useState("");
+  const [date, setDate] = useState("")
+  const [time, setTime] = useState("")
 
 
   useEffect(() => {
 
-      const city = "dar es salaam";
-      const part1 = "https://api.openweathermap.org/data/2.5/weather?q=";
-      const part2 = "&appid=c1f0fdee222f1940a77d2026fef8d81d"
-      const URL = part1 + city + part2;
-      fetch(URL)
-      .then(response => {
-        if (!response.ok) {
-            console.log("Network response was not ok.");
-        }
-        return response.json();
-    })
-    .then(datas => {
-      setData(datas.message);
-      console.log(data)
-    })
-    .catch(error => console.error("There was a problem with the fetch operation:", error));
+    const fetchData = async () => {
 
-      
-  }, []);
+      const city = "dar es salaam";
+      const code = "c1f0fdee222f1940a77d2026fef8d81d";
+
+      // const part1 = "https://api.openweathermap.org/data/2.5/weather?q=";
+      // const part2 = "&appid=c1f0fdee222f1940a77d2026fef8d81d"
+      // const URL = part1 + city + part2;
+      // const results = await fetch(URL)
+      // results.json().then(outputs => {
+      //     //console.log(outputs["name"]);
+      //     setData(outputs);
+      // })
+
+        getWeather({
+                  
+              key: code,
+              city: city,
+
+        }).then(() => {
+
+         const results = new showWeather();
+
+         setCity(results.name)
+         setCondition(results.description)
+         setFeeling(results.feels_like)
+         setHumidity(results.humidity)
+         setTemperature(results.temp)
+         setWind(results.wind)
+         setIcon(results.icon)
+
+         const dating = new Date();
+         const datevalue = dating.toDateString();
+         const timevalue = dating.toLocaleTimeString()
+
+         setDate(datevalue);
+         setTime(timevalue);
+        
+        });
+
+
+    } 
+
+    fetchData();
+
+  }, [])
 
   return (
     <View style={styles.container}>
@@ -52,26 +88,24 @@ export default function HomeScreen ({ navigation }){
 
         <View style= {styles.locationContainer}>
             <Ionicons name="location-sharp" size={24} color="#FFB200" />
-            <Text style = {styles.locationName}>{data["name"]}</Text>
+            <Text style = {styles.locationName}>{city}</Text>
         </View>
 
         <View style = {styles.cloudsContainer}>
-            {
-                    
-            }
+            <Image source = {{uri:icon}} style = {styles.theIcon}/>
         </View>
 
         <View style = {styles.temperatureContainer}>
-            <Text style = {styles.tempValue}>{data["main"]["temp"]}</Text>
+            <Text style = {styles.tempValue}>{temperature}</Text>
             <Text style = {styles.tempSymbol}>c</Text>
         </View>
 
         <View style = {styles.conditionContainer}>
             <View style = {styles.subConditionContainer}>
               <Text style = {styles.feelingText}>Feeling Like</Text>
-              <Text style = {styles.feelingNumber}>{data["main"]["feels_like"]}</Text>
+              <Text style = {styles.feelingNumber}>{feeling}</Text>
             </View> 
-            <Text style = {styles.conditionName}>{data["weather"][0]["main"]}</Text>
+            <Text style = {styles.conditionName}>{condition}</Text>
         </View>
 
         <View style = {styles.blankContainer}>
@@ -83,20 +117,20 @@ export default function HomeScreen ({ navigation }){
               <View style = {styles.windContainer}>
                   <Feather name="wind" size={24} color="white" />
                   <Text style = {styles.windName}>Windspeed</Text>
-                  <Text style = {styles.windValue}>{data["wind"]["speed"]} Km/Hr</Text>
+                  <Text style = {styles.windValue}>{wind} Km/Hr</Text>
 
               </View>
 
               <View style = {styles.dateContainer}>
                   <EvilIcons name="calendar" size={24} color="white" />
-                  <Text style = {styles.dateName}>Tuesday, 04 Oct 2022</Text>
-                  <Text style = {styles.dateValue}>12:00</Text>
+                  <Text style = {styles.dateName}>{date}</Text>
+                  <Text style = {styles.dateValue}>{time}</Text>
               </View>
 
               <View style = {styles.humidityContainer}>
                   <Fontisto name="rain" size={24} color="white" />
                   <Text style = {styles.humidityName}>Humidity</Text>
-                  <Text style = {styles.humidityValue}>{data["main"]["humidity"]}%</Text>
+                  <Text style = {styles.humidityValue}>{humidity}%</Text>
               </View>
 
         </View>
@@ -148,6 +182,14 @@ const styles = StyleSheet.create({
 
   },
 
+  theIcon:{
+    width: '150px',
+    height: '150px',
+    position: "absolute",
+    left: "50%",
+
+  },
+
   locationContainer:{
     width: '100%',
     height: '10%',
@@ -175,16 +217,8 @@ const styles = StyleSheet.create({
     height: '15%',
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 
-  cloudsIcon: {
-    width: "50px",
-    height: "50px",
-    position: "absolute",
-    left: 250,
-  },
   temperatureContainer: {
     width: '100%',
     height: '15%',
@@ -195,7 +229,7 @@ const styles = StyleSheet.create({
   },
 
   tempValue: {
-      fontSize: "100px",
+      fontSize: "50px",
       fontWeight: "bold",
       color: "white",
   },
@@ -204,8 +238,8 @@ const styles = StyleSheet.create({
       fontSize: "50px",
       color: "white",
       position: "absolute",
-      top: 40,
-      left: 270,
+      top: "15%",
+      left: "75%",
   },
   conditionContainer:{
     width: '100%',
@@ -279,7 +313,8 @@ const styles = StyleSheet.create({
   windValue: {
     fontSize: 20,
     color: 'white',
-    marginLeft: 90,
+    position: "absolute",
+    left: "65%",
   },
 
   dateContainer:{
@@ -307,7 +342,8 @@ const styles = StyleSheet.create({
   dateValue: {
     fontSize: 20,
     color: 'white',
-    marginLeft: 30,
+    position: "absolute",
+    left: "65%",
   },
 
   humidityContainer:{
@@ -335,7 +371,8 @@ const styles = StyleSheet.create({
   humidityValue: {
     fontSize: 20,
     color: 'white',
-    marginLeft: 150,
+    position: "absolute",
+    left: "65%",
   },
 
   navContainer:{

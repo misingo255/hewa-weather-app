@@ -3,7 +3,9 @@ import { View, Image, StyleSheet, Text, TouchableOpacity, TextInput,Alert} from 
 import { EvilIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
-
+import { useToast } from 'react-native-fast-toast'
+import { getWeather, dailyForecast, showWeather, getLocation } from 'react-native-weather-api';
+import LoaderScreen from './LoaderScreen'
 
 const BackgroundImage = () => {
   return (
@@ -15,14 +17,41 @@ const BackgroundImage = () => {
 export default function SearchScreen ({ navigation }){
 
   const [city, setCity] = useState("")
+  const [logInPending, setLogInPending] = useState(false)
+
+  const toast = useToast()
 
   const onCitySearch = () => {
 
+    setLogInPending(true);
+
     if(city === ""){
-      console.log("City name can't be empty");
+        alert("Search input cant be empty!!");
     } else {
-      console.log(city);
+      
+        getWeather({
+                        
+              key: "c1f0fdee222f1940a77d2026fef8d81d",
+              city: city,
+
+        })
+        .then(() => {
+
+        const results = new showWeather();
+
+          navigation.navigate("ResultsScreen", {results});
+          setCity("");
+
+        })
+        .catch(err => {
+          setCity("");
+          alert("City can't be found!!");
+        })
+
+
     }
+
+    setLogInPending(false);
   }
 
   return (
@@ -62,6 +91,7 @@ export default function SearchScreen ({ navigation }){
           </TouchableOpacity>
 
         </View>
+        {logInPending ? <LoaderScreen /> : null}
     </View>
   );
 };
